@@ -6,12 +6,6 @@ import java.io.PrintWriter;
 import java.util.*;
 
 public class CommandTune {
-    // do ket data structures per song list / playlist q do jet linkedlist
-    //linked list per favourite songs
-    //linked list per selected songs qe te besh operations per iher pra te fshish shum kong per iher.
-    // stack per undo redo dhe kshu veprimesh
-
-    // akoma duhen diskutu
 
 
     private LinkedList<Song> SongList;
@@ -73,7 +67,7 @@ public class CommandTune {
         LinkedList<Song> matchingSongs = new LinkedList<>();
 
         if(SongList.isEmpty())
-            System.out.println("\tYour playlist is empty, add some songs first.");
+            System.out.println("\tYour playlist is empty, please add some songs first.");
 
         else
         {
@@ -95,7 +89,7 @@ public class CommandTune {
         LinkedList<Song> matchingSongs = new LinkedList<>();
 
         if(SongList.isEmpty())
-            System.out.println("\tYour playlist is empty, add some songs first.");
+            System.out.println("\tYour playlist is empty, please add some songs first.");
 
         else
         {
@@ -131,10 +125,10 @@ public class CommandTune {
         if (index >= 0 && index < favoriteSongs.size())
         {
             Song removedSong = favoriteSongs.remove(index);
-            System.out.println("\tU fshi nga kenget e preferuara: " + removedSong.getTitle());
+            System.out.println("\tDeleted from favourite songs: " + removedSong.getTitle());
         }
         else {
-            System.out.println("\tIndeks i gabuar.");
+            System.out.println("\tWrong index.");
         }
     }
 
@@ -142,7 +136,7 @@ public class CommandTune {
     {
         if (SongList.isEmpty())
         {
-            System.out.println("\tPlaylista juaj eshte bosh, ju lutem shtoni ne fillim disa kenge!");
+            System.out.println("\tYour playlist is empty, please add some songs first!");
         }
 
         else {
@@ -157,7 +151,7 @@ public class CommandTune {
     {
         if (favoriteSongs.isEmpty())
         {
-            System.out.println("\tPlaylista juaj eshte bosh, ju lutem shtoni ne fillim disa kenge!");
+            System.out.println("\tYour playlist is empty, please add some songs first!");
         }
 
         else {
@@ -173,7 +167,7 @@ public class CommandTune {
     public void playSongs()
     {
         if(SongList.isEmpty())
-            System.out.println("\tPlaylista juaj eshte bosh, ju lutem shtoni ne fillim disa kenge!");
+            System.out.println("\tYour playlist is empty, please add some songs first!");
 
         else
         {
@@ -204,7 +198,7 @@ public class CommandTune {
     public void playFavSongs()
     {
         if(favoriteSongs.isEmpty())
-            System.out.println("\tPlaylista juaj eshte bosh, ju lutem shtoni ne fillim disa kenge!");
+            System.out.println("\tYour playlist is empty, please add some songs first!");
 
         else
         {
@@ -235,7 +229,7 @@ public class CommandTune {
     {
         if (operationStack.isEmpty())
         {
-            System.out.println("\tNuk ka me veprime te meparshme.");
+            System.out.println("\tNo actions to undo.");
         }
 
         else
@@ -246,13 +240,13 @@ public class CommandTune {
                 case ADD:
                     SongList.remove(lastOperation.getSong());
                     redoStack.push(lastOperation);
-                    System.out.println("\tVeprimi u be undo!");
+                    System.out.println("\tUndo successfully!");
                     break;
 
                 case REMOVE:
                     SongList.add(lastOperation.getSong());
                     redoStack.push(lastOperation);
-                    System.out.println("\tVeprimi u be undo!");
+                    System.out.println("\tUndo successfully!");
                     break;
 
                 case EDIT:
@@ -261,7 +255,7 @@ public class CommandTune {
                     int index = SongList.indexOf(newSong);
                     SongList.set(index, oldSong);
                     redoStack.push(lastOperation);
-                    System.out.println("\tVeprimi u be undo!");
+                    System.out.println("\tUndo successfully!");
                     break;
 
                 default:
@@ -269,10 +263,134 @@ public class CommandTune {
             }
         }
     }
+    public void saveSongsToFile(String file)
+    {
+        try (PrintWriter write = new PrintWriter(new FileWriter(file, true)))
+        {
+            for (Song song : SongList)
+            {
+                write.println(song.getTitle());
+                write.println(song.getArtist());
+                write.println(song.getGenre());
+                write.println(song.getDuration());
+            }
+
+            System.out.println("Songs saved on file: " + file);
+        }
+        catch (IOException e)
+        {
+            System.out.println("Songs not saved on file: " + file);
+            e.printStackTrace();
+        }
+    }
+
+
+    public void saveFavSongsToFile(String file)
+    {
+        try (PrintWriter write = new PrintWriter(new FileWriter(file)))
+        {
+            for (Song song : favoriteSongs)
+            {
+                write.println(song.getTitle());
+                write.println(song.getArtist());
+                write.println(song.getGenre());
+                write.println(song.getDuration());
+            }
+
+            System.out.println("Favourite songs saved on file: " + file);
+        }
+
+        catch (IOException e)
+        {
+            System.out.println("Favourite songs not saved on file: " + file);
+            e.printStackTrace();
+        }
+    }
+
+
+
+    public void readSongsFromFile(String file) {
+        try (Scanner scanner = new Scanner(new File(file))) {
+            SongList.clear();
+            System.out.println("\tReading songs from file: " + file);
+
+            while (scanner.hasNextLine()) {
+                String title = scanner.nextLine();
+
+                if (!scanner.hasNextLine()) {
+                    System.out.println("Incomplete song data after title: " + title);
+                    break;
+                }
+
+                String artist = scanner.nextLine();
+
+                if (!scanner.hasNextLine()) {
+                    System.out.println("Incomplete song data after artist: " + artist);
+                    break;
+                }
+
+                String genre = scanner.nextLine();
+
+                if (!scanner.hasNextLine()) {
+                    System.out.println("Incomplete song data after genre: " + genre);
+                    break;
+                }
+
+                String durationLine = scanner.nextLine();
+
+                int duration;
+
+                try {
+                    duration = Integer.parseInt(durationLine);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid duration format for song: " + title);
+                    continue;
+                }
+
+                Song song = new Song(title, artist, genre, duration);
+                SongList.add(song);
+            }
+
+            System.out.println("\tSongs from " + file);
+            for (Song song : SongList) {
+                System.out.println("\t" + song);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + file);
+            e.printStackTrace();
+        }
+    }
+
+
+    public void readFavSongsFromFile(String file)
+    {
+        try (Scanner scanner = new Scanner(new File(file)))
+        {
+            favoriteSongs.clear();
+
+            while (scanner.hasNextLine())
+            {
+                String title = scanner.nextLine();
+                String artist = scanner.nextLine();
+                String genre = scanner.nextLine();
+                int duration = Integer.parseInt(scanner.nextLine());
+                Song song = new Song(title, artist, genre, duration);
+                favoriteSongs.add(song);
+            }
+            System.out.println("Favourite songs from CommandTune: " + file);
+        }
+
+        catch (FileNotFoundException e)
+        {
+            System.out.println("File not found: " + file);
+            e.printStackTrace();
+        }
+    }
+
 
     public void redoLastAction() {
         if (redoStack.isEmpty()) {
-            System.out.println("\tNuk ka veprime te kryera.");
+            System.out.println("\tNo actions to redo.");
         } else {
             SongActions lastRedo = redoStack.pop();
 
@@ -280,13 +398,13 @@ public class CommandTune {
                 case ADD:
                     SongList.add(lastRedo.getSong());
                     operationStack.push(lastRedo);
-                    System.out.println("\tVeprimi u be redo!");
+                    System.out.println("\tRedo successfully!");
                     break;
 
                 case REMOVE:
                     SongList.remove(lastRedo.getSong());
                     operationStack.push(lastRedo);
-                    System.out.println("\tVeprimi u be redo!");
+                    System.out.println("\tRedo successfully!");
                     break;
 
                 case EDIT:
@@ -295,7 +413,7 @@ public class CommandTune {
                     int index = SongList.indexOf(oldSong);
                     SongList.set(index, newSong);
                     operationStack.push(lastRedo);
-                    System.out.println("\tVeprimi u be redo!");
+                    System.out.println("\tRedo successfully!");
                     break;
 
                 default:

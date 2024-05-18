@@ -1,17 +1,17 @@
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class MainTest {
-    public static void main (String[] args){
-     
-     	MusicApp iMusic = new MusicApp();
+public class App {
+    public static void main(String[] args) {
+
+        CommandTune CommandTune = new CommandTune();
         Scanner scanner = new Scanner(System.in);
-        
-        int zgjedhja;
-        
+
+        int choice;
+
         do {
-        	
-            System.out.println(" \n************ Welcome to CommandTune ************");
+
+            System.out.println(" \n************ --- Welcome to CommandTune --- ************");
             System.out.println("\n\t1. Add a song:");
             System.out.println("\t2. Delete a song:");
             System.out.println("\t3. Change a song:");
@@ -31,13 +31,12 @@ public class MainTest {
             System.out.println("\t17. Read your favourite songs from a file: ");
             System.out.println("\t18. Exit");
             System.out.print("\n\n\tChoose your option: ");
-            zgjedhja = scanner.nextInt();
+            choice = scanner.nextInt();
 
-            switch (zgjedhja) 
-            {
+            switch (choice) {
                 case 1:
 
-                    scanner.nextLine(); 
+                    scanner.nextLine();
                     System.out.print("\tSelect the title: ");
                     String title = scanner.nextLine();
                     System.out.print("\tSelect the artist: ");
@@ -49,20 +48,20 @@ public class MainTest {
                     CommandTune.addSong(title, artist, genre, duration);
                     System.out.println("\tSong added successfully!");
                     break;
-                    
-                    
+
+
                 case 2:
                     System.out.print("\tEnter the track number of the song you want to delete: ");
-                    int index = scanner.nextInt()-1;
+                    int index = scanner.nextInt() - 1;
                     CommandTune.removeSong(index);
                     System.out.println("\tSong deleted successfully!");
                     break;
-                    
-                    
+
+
                 case 3:
                     System.out.print("\tEnter the track number ");
-                    int updateIndex = scanner.nextInt() -1;
-                    scanner.nextLine();  
+                    int updateIndex = scanner.nextInt() - 1;
+                    scanner.nextLine();
                     System.out.print("\tSelect the new title: ");
                     String newTitle = scanner.nextLine();
                     System.out.print("\tSelect the new artist: ");
@@ -74,70 +73,67 @@ public class MainTest {
                     CommandTune.editSong(updateIndex, newTitle, newArtist, newGenre, newDuration);
                     System.out.println("\tSong updated successfully!");
                     break;
-                    
-                    
+
+
                 case 4:
-                    scanner.nextLine();  
+                    scanner.nextLine();
                     System.out.print("\tEnter the search genre: ");
                     String zhanri = scanner.nextLine();
                     LinkedList<Song> matchingSongs = CommandTune.searchByGenre(zhanri);
                     CommandTune.printList(matchingSongs);
                     break;
-                    
-                    
+
+
                 case 5:
-                    scanner.nextLine();  
+                    scanner.nextLine();
                     System.out.print("\tEnter the name of the artist: ");
                     String artisti = scanner.nextLine();
                     LinkedList<Song> matchingSongsArtist = CommandTune.searchByArtist(artisti);
                     CommandTune.printList(matchingSongsArtist);
                     break;
-                    
+
                 case 6:
                     CommandTune.playSongs();
                     break;
-                    
-                
+
+
                 case 7:
-                	CommandTune.playFavSongs();
-                	break;
-                    
-                    
-                    
-                    
+                    CommandTune.playFavSongs();
+                    break;
+
+
                 case 8:
                     System.out.print("\tEnter the track number of the song you want to add to the favourites: ");
                     int addFavoriteIndex = scanner.nextInt() - 1;
                     CommandTune.addFavoriteSong(addFavoriteIndex);
                     System.out.println("\tSong added to your favourites successfully!");
                     break;
-                    
+
                 case 9:
                     System.out.print("\tEnter the track number of the song you want to remove to the favourites: ");
                     int removeFavoriteIndex = scanner.nextInt() - 1;
                     CommandTune.removeFavoriteSong(removeFavoriteIndex);
                     System.out.println("\tSong removed from your favourites!");
                     break;
-                    
+
                 case 10:
-                	CommandTune.printSongList();
+                    CommandTune.printSongList();
                     break;
-                    
+
                 case 11:
-                	CommandTune.printFavoriteSongs();
+                    CommandTune.printFavoriteSongs();
                     break;
-                    
+
                 case 12:
                     CommandTune.undoLastAction();
                     break;
-                    
-                    
+
+
                 case 13:
                     CommandTune.redoLastAction();
                     break;
-                    
-                    
-                    
+
+
                 case 14:
                     System.out.print("\tEnter the file name to save your song list: ");
                     scanner.nextLine();
@@ -146,34 +142,36 @@ public class MainTest {
                     break;
 
                 case 15:
-                	System.out.print("\tEnter the file name to read your song list: ");
-                    scanner.nextLine(); 
+                    System.out.print("\tEnter the file name to read your song list: ");
+                    scanner.nextLine();
                     String readFilename = scanner.nextLine();
                     CommandTune.readSongsFromFile(readFilename);
                     break;
 
-                
+
                 case 16:
-                	System.out.print("\tEnter the file name to save your favourites: ");
-                    scanner.nextLine(); 
+                    System.out.print("\tEnter the file name to save your favourites: ");
+                    scanner.nextLine();
                     String favfile = scanner.nextLine();
                     CommandTune.saveFavSongsToFile(favfile);
                     break;
 
                 case 17:
-                	System.out.print("\tEnter the file name to read your favourites: ");
-                    scanner.nextLine(); 
+                    System.out.print("\tEnter the file name to read your favourites: ");
+                    scanner.nextLine();
                     String readFavFile = scanner.nextLine();
                     CommandTune.readFavSongsFromFile(readFavFile);
                     break;
-                    
+
                 case 18:
                     System.out.println("\n\tExiting CommandTune...");
                     System.exit(0);
                     break;
-                    
+
                 default:
                     System.out.println("\tWrong track. Please choose a correct track!");
             }
+        }while (choice != 14);
+        scanner.close();
     }
 }
