@@ -12,14 +12,13 @@ public class CommandTune {
     private LinkedList<Song> favoriteSongs;
     private Stack<SongActions> operationStack;
     private Stack<SongActions> redoStack;
-    private LinkedList<Song> selectedSongs;
+
 
     public CommandTune() {
         SongList = new LinkedList<>();
         favoriteSongs = new LinkedList<>();
         operationStack = new Stack<>();
         redoStack = new Stack<>();
-        selectedSongs = new LinkedList<>();
     }
 
     public void addSong(String title, String artist, String genre, int duration) {
@@ -140,7 +139,7 @@ public class CommandTune {
         }
 
         else {
-            System.out.println("\tLista e kengevet:");
+            System.out.println("\tPlaylist:");
             for (int i = 0; i < SongList.size(); i++) {
                 System.out.println("\t"+(i + 1) + ". " + SongList.get(i).toString());
             }
@@ -155,7 +154,7 @@ public class CommandTune {
         }
 
         else {
-            System.out.println("\tKenget e preferuara:");
+            System.out.println("\tFavourite songs ");
 
             for (int i = 0; i < favoriteSongs.size(); i++)
             {
